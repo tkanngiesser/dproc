@@ -1,7 +1,6 @@
 {
   "dproc": {
     "Overview": "/",
-    "dproc": "/core",
-    "Title": "/test_workflow"
+    "dproc": "/core"
   }
 }

@@ -12,9 +12,6 @@ entries:
     - output: web,pdf
       title: dproc
       url: /core
-    - output: web,pdf
-      title: Title
-      url: /test_workflow
     output: web
     title: dproc
   output: web
