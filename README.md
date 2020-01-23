@@ -1,5 +1,5 @@
 # dproc
-> A convenient data flow to preprocess data using metadata.
+> A convenient way to preprocess data using metadata.
 
 
 ## Install
