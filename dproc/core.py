@@ -20,14 +20,22 @@ import numpy as np
 import pandas as pd
 import pandas_profiling
 import pandas_flavor as pf
+import janitor
 from dataclasses import dataclass
+from typing import List, Dict, Tuple, Sequence
 
 # Cell
 @dataclass
 class Meta:
+    _datatypes: pd.DataFrame = None
     _definition: pd.DataFrame = None
+    _description: pd.DataFrame = None
     _entity_definition: pd.DataFrame = None
     _entity: str = None
+    _is_unique_id: List = None
+    _is_mandatory: List = None
+    _name_clean: str = None
+    _name_raw: str = None
 
     @property
     def definition(self) -> pd.DataFrame:
@@ -45,10 +53,110 @@ class Meta:
     def entity(self, value: str) -> None:
         self._entity = value
         self._entity_definition = self._definition[self._definition.entity == self._entity]
+        self._is_unique_id = list(self._entity_definition[self._entity_definition.is_unique_id == True]['name_clean'].values)
+        self._is_mandatory = list(self._entity_definition[self._entity_definition.is_mandatory == True]['name_clean'].values)
+        self._description = pd.DataFrame(self._entity_definition[['name_clean', 'description']].values, columns=['name', 'description'])
 
     @property
     def entity_definition(self) -> pd.DataFrame:
         return self._entity_definition
+
+    @property
+    def name_clean(self):
+        return self._name_clean
+
+    @name_clean.setter
+    def name_clean(self, names: List) -> List:
+        self._name_clean = list(name)
+
+    @property
+    def name_raw(self):
+        return self._name_raw
+
+    @name_raw.setter
+    def name_raw(self, names: List) -> str:
+        self._name_raw = list(names)
+
+    @property
+    def is_unique_id(self):
+        return self._is_unique_id
+
+    @is_unique_id.setter
+    def is_unique_id(self, cols: List) -> None:
+        self._is_unique_id = cols
+
+    @property
+    def is_mandatory(self):
+        return self._is_mandatory
+
+    @is_mandatory.setter
+    def is_mandatory(self, cols: List) -> None:
+        self._is_mandatory = cols
+
+    @property
+    def description(self):
+        return self._description
+
+    @description.setter
+    def description(self, description: Dict) -> pd.DataFrame:
+        df = pd.DataFrame()
+        df['name'] = list(description.keys())
+        df['description'] = list(description.values())
+        self._description = df
+
+    @property
+    def datatypes(self):
+        return self._datatypes
+
+    @datatypes.setter
+    def datatypes(self, datatypes: Dict) -> pd.DataFrame:
+        df = pd.DataFrame()
+        df['name'] = list(datatypes.keys())
+        df['datatype'] = list(datatypes.values())
+        self._datatypes = df
+
+    def make_definition(self, df=None, name_raw=None, name_clean=None, name_dashboard=None, is_unique_id=None, is_mandatory=None, datatype=None):
+        """Make definition out of properties"""
+        dd = pd.DataFrame()
+        try:
+            if name_raw:
+                dd['name_raw'] = name_raw
+            elif list(df.columns):
+                name_raw = list(df.columns)
+                dd['name_raw'] = name_raw
+
+        except:
+            print('No raw names to start with. Please provide a list of raw names or a dataframe.')
+            return None
+
+        if name_clean:
+            dd['name_clean'] = name_clean
+        else:
+            name_clean = list(pd.DataFrame(columns=name_raw).clean_names().columns)
+            dd['name_clean'] = name_clean
+
+        if name_dashboard:
+            dd['name_dashboard'] = name_dashboard
+        else:
+            name_dashboard = []
+            for name in name_clean:
+                ''.join([x.capitalize() for x in name.split('_')])
+                name_dashboard.append(''.join([x.capitalize() for x in name.split('_')]))
+            dd['name_dashboard'] = name_dashboard
+
+        dd['is_unique_id'] = is_unique_id
+
+        if is_mandatory:
+            dd['is_mandatory'] = is_mandatory
+        else:
+            dd['is_mandatory'] = True
+
+        if datatype:
+            dd['datatype'] = datatype
+        else:
+            dd['datatype'] = pd.DataFrame(df.infer_objects().dtypes).reset_index()[0].astype(str).values
+
+        return dd
 
 # Cell
 meta = Meta()
@@ -150,7 +258,7 @@ def step_change_dtypes(df, date_format="%Y-%m-%d %H:%M:%S"):
     )
     for col in cols:
         if col[1] == "int":
-            df[col[0]] = df[col[0]].astype('Int64')
+            df[col[0]] = pd.to_numeric(df[col[0]], errors='coerce').astype('Int64')
         elif col[1] == "float":
             df[col[0]] = df[col[0]].astype(float)
         elif col[1] == "str":
