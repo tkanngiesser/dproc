@@ -34,11 +34,24 @@ class Meta:
     _entity: str = None
     _is_unique_id: List = None
     _is_mandatory: List = None
-    _name_clean: str = None
-    _name_raw: str = None
+    _name_clean: List = None
+    _name_raw: List = None
+    _name_dashboard: List = None
+    _today = datetime.today().strftime("%Y-%m-%d")
+    _profile_report: pandas_profiling.__init__.ProfileReport = None
+
+
+    @property
+    def profile_report(self) -> pandas_profiling.__init__.ProfileReport:
+        return self._profile_report
+
+    @profile_report.setter
+    def profile_report(self, profile_report) -> None:
+        self._profile_report = profile_report
 
     @property
     def definition(self) -> pd.DataFrame:
+        self._update_definition()
         return self._definition
 
     @definition.setter
@@ -52,37 +65,89 @@ class Meta:
     @entity.setter
     def entity(self, value: str) -> None:
         self._entity = value
-        self._entity_definition = self._definition[self._definition.entity == self._entity]
-        self._is_unique_id = list(self._entity_definition[self._entity_definition.is_unique_id == True]['name_clean'].values)
-        self._is_mandatory = list(self._entity_definition[self._entity_definition.is_mandatory == True]['name_clean'].values)
-        self._description = pd.DataFrame(self._entity_definition[['name_clean', 'description']].values, columns=['name', 'description'])
+
+    def _update_definition(self):
+        self._definition['entity'] = self._entity
+        self._definition['name_raw'] = self._name_raw
+        self._definition['name_clean'] = list(self._name_clean.values())
+        self._definition['name_dashboard'] = list(self._name_dashboard.values())
+
+        if self._is_unique_id == {}:
+            self._definition['is_unique_id'] = False
+        else:
+            self._definition['is_unique_id'] = list(self._is_unique_id.values())
+
+        if self._is_mandatory == {}:
+            self._definition['is_mandatory'] = True
+        else:
+            self._definition['is_mandatory'] = list(self._is_mandatory.values())
+
+        if self._datatypes == {}:
+            self._definition['datatype'] = None
+        else:
+            self._definition['datatype'] = list(self._datatypes.values())
+
+        if self._description == {}:
+            self._definition['description'] = None
+        else:
+            self._definition['description'] = list(self._description.values())
+
+    def _update_meta(self):
+        self._name_raw = list(self._definition['name_raw'].values)
+        self._name_clean = dict(zip(self._name_raw, list(self._definition['name_clean'].values)))
+        self._name_dashboard = dict(zip(list(self._definition['name_clean'].values),
+                                        list(self._definition['name_dashboard'].values)))
+        self._is_unique_id = dict(zip(list(self._definition['name_clean'].values),
+                                      list(self._definition['is_unique_id'].values)))
+        self._is_mandatory = dict(zip(list(self._definition['name_clean'].values),
+                                      list(self._definition['is_mandatory'].values)))
+        self._datatypes = dict(zip(list(self._definition['name_clean'].values),
+                                   list(self._definition['datatype'].values)))
+        self._description = dict(zip(list(self._definition['name_clean'].values),
+                                     list(self._definition['description'].values)))
 
     @property
     def entity_definition(self) -> pd.DataFrame:
         return self._entity_definition
 
     @property
+    def today(self):
+        return self._today
+
+    @property
+    def today(self):
+        return self._today
+
+    @property
     def name_clean(self):
         return self._name_clean
 
     @name_clean.setter
-    def name_clean(self, names: List) -> List:
-        self._name_clean = list(name)
+    def name_clean(self, names: Dict) -> Dict:
+        self._name_clean = names
 
     @property
     def name_raw(self):
         return self._name_raw
 
     @name_raw.setter
-    def name_raw(self, names: List) -> str:
+    def name_raw(self, names: List) -> None:
         self._name_raw = list(names)
+
+    @property
+    def name_dashboard(self):
+        return self._name_dashboard
+
+    @name_dashboard.setter
+    def name_dashboard(self, names: Dict) -> None:
+        self._name_dashboard = list(name)
 
     @property
     def is_unique_id(self):
         return self._is_unique_id
 
     @is_unique_id.setter
-    def is_unique_id(self, cols: List) -> None:
+    def is_unique_id(self, cols: Dict) -> None:
         self._is_unique_id = cols
 
     @property
@@ -90,7 +155,7 @@ class Meta:
         return self._is_mandatory
 
     @is_mandatory.setter
-    def is_mandatory(self, cols: List) -> None:
+    def is_mandatory(self, cols: Dict) -> None:
         self._is_mandatory = cols
 
     @property
@@ -98,33 +163,42 @@ class Meta:
         return self._description
 
     @description.setter
-    def description(self, description: Dict) -> pd.DataFrame:
-        df = pd.DataFrame()
-        df['name'] = list(description.keys())
-        df['description'] = list(description.values())
-        self._description = df
+    def description(self, description: Dict) -> None:
+        self.description = description
 
     @property
     def datatypes(self):
         return self._datatypes
 
     @datatypes.setter
-    def datatypes(self, datatypes: Dict) -> pd.DataFrame:
-        df = pd.DataFrame()
-        df['name'] = list(datatypes.keys())
-        df['datatype'] = list(datatypes.values())
-        self._datatypes = df
+    def datatypes(self, datatypes: Dict) -> None:
+        self._datatypes = datatypes
+        self._definition = self._definition['datatype'] = self._datatypes
 
-    def make_definition(self, df=None, name_raw=None, name_clean=None, name_dashboard=None, is_unique_id=None, is_mandatory=None, datatype=None):
+    def make_definition(self, df=None, name_raw=None, name_clean=None, name_dashboard=None,
+                        is_unique_id=None, is_mandatory=None, datatypes=None, description=None):
         """Make definition out of properties"""
         dd = pd.DataFrame()
+
+        try:
+            dd['entity'] = meta.entity
+        except:
+            print('No entity name. Please provide an enity name by either providing an entity argument or setting meta.entity.')
+            return None
+
+        if (self.name_raw is None) and (df is None):
+            print('No raw names to start with. Please provide a list of raw names or a dataframe.')
+            return None
         try:
             if name_raw:
                 dd['name_raw'] = name_raw
             elif list(df.columns):
                 name_raw = list(df.columns)
                 dd['name_raw'] = name_raw
-
+            elif self._name_raw:
+                dd['name_raw'] = self.name_raw
+            else:
+                dd['name_raw'] = None
         except:
             print('No raw names to start with. Please provide a list of raw names or a dataframe.')
             return None
@@ -144,19 +218,30 @@ class Meta:
                 name_dashboard.append(''.join([x.capitalize() for x in name.split('_')]))
             dd['name_dashboard'] = name_dashboard
 
-        dd['is_unique_id'] = is_unique_id
+        if is_unique_id:
+            dd['is_unique_id'] = is_unique_id
+        else:
+            dd['is_unique_id'] = False
 
         if is_mandatory:
             dd['is_mandatory'] = is_mandatory
         else:
             dd['is_mandatory'] = True
 
-        if datatype:
-            dd['datatype'] = datatype
+        if datatypes:
+            dd['datatype'] = datatypes
         else:
             dd['datatype'] = pd.DataFrame(df.infer_objects().dtypes).reset_index()[0].astype(str).values
 
-        return dd
+        if description:
+            dd['description'] = description
+        elif self._description:
+            dd['description'] = self._description
+        else:
+            dd['description'] = None
+
+        self.definition = dd
+        self._update_meta()
 
 # Cell
 meta = Meta()
@@ -168,8 +253,8 @@ def step_rename_cols(df, mapping=None):
     if not mapping:
         mapping = dict(
             zip(
-                meta.entity_definition["name_raw"].values,
-                meta.entity_definition["name_clean"].values,
+                meta.definition["name_raw"].values,
+                meta.definition["name_clean"].values,
             )
         )
     df = df.rename(columns=mapping)
@@ -190,7 +275,7 @@ def step_replace_missing_with_nan(df, missing_values=None):
 def step_remove_not_needed_cols(df, cols=None):
     """Remove not needed columns"""
     if not cols:
-        cols = list(meta.entity_definition[meta.entity_definition.is_mandatory == False]["name_clean"].values)
+        cols = list(meta.definition[meta.definition.is_mandatory == False]["name_clean"].values)
     df = df.drop(columns=cols)
     return df
 
@@ -199,7 +284,7 @@ def step_remove_not_needed_cols(df, cols=None):
 def step_remove_rows_with_missing_ids(df, id_cols=None):
     """Remove rows with invalid ids"""
     if not id_cols:
-        id_cols = list(meta.entity_definition[meta.entity_definition.is_unique_id == True]["name_clean"].values)
+        id_cols = list(meta.definition[meta.definition.is_unique_id == True]["name_clean"].values)
     df = df.dropna(subset=id_cols)
     return df
 
@@ -208,7 +293,7 @@ def step_remove_rows_with_missing_ids(df, id_cols=None):
 def step_remove_duplicate_rows(df, id_cols=None, keep="last"):
     """Remove duplicate rows"""
     if not id_cols:
-        id_cols = meta.entity_definition[meta.entity_definition.is_unique_id == True]["name_clean"].values
+        id_cols = meta.definition[meta.definition.is_unique_id == True]["name_clean"].values
     df.drop_duplicates(subset=id_cols, keep=keep, inplace=True)
     return df
 
@@ -217,7 +302,7 @@ def step_remove_duplicate_rows(df, id_cols=None, keep="last"):
 def step_format_dates(df, cols=None, date_format=None):
     """Format date columns"""
     if not cols:
-        cols = meta.entity_definition[meta.entity_definition.datatype.isin(["date", "datetime"])]["name_clean"].values
+        cols = meta.definition[meta.definition.datatype.isin(["date", "datetime"])]["name_clean"].values
     for col in cols:
         if date_format:
             df[col] = pd.to_datetime(df[col], format=date_format)
@@ -240,7 +325,7 @@ def _round_float(value, decimal_places=2):
 def step_format_round_numeric_cols(df, cols=None, decimal_places=2):
     """Round columns to defined number of decimal places"""
     if not cols:
-        cols = meta.entity_definition[meta.entity_definition["dtype"].isin(["float"])]["name_clean"].values
+        cols = meta.definition[meta.definition["dtype"].isin(["float"])]["name_clean"].values
     for col in cols:
         df[col] = df[col].apply(_round_float, args=(decimal_places,))
     return df
@@ -249,7 +334,7 @@ def step_format_round_numeric_cols(df, cols=None, decimal_places=2):
 @pf.register_dataframe_method
 def step_change_dtypes(df, date_format="%Y-%m-%d %H:%M:%S"):
     """Change datatypes"""
-    _entity_definition = meta.entity_definition[meta.entity_definition.is_mandatory == True]
+    _entity_definition = meta.definition[meta.definition.is_mandatory == True]
     cols = list(
         zip(
             _entity_definition["name_clean"].values,
