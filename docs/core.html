@@ -37,9 +37,9 @@ summary: "API details."
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="Meta" class="doc_header"><code>class</code> <code>Meta</code><a href="https://github.com/tkanngiesser/dproc/tree/master/dproc/core.py#L29" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Meta</code>(<strong><code>_datatypes</code></strong>:<code>DataFrame</code>=<em><code>None</code></em>, <strong><code>_definition</code></strong>:<code>DataFrame</code>=<em><code>None</code></em>, <strong><code>_description</code></strong>:<code>DataFrame</code>=<em><code>None</code></em>, <strong><code>_entity_definition</code></strong>:<code>DataFrame</code>=<em><code>None</code></em>, <strong><code>_entity</code></strong>:<code>str</code>=<em><code>None</code></em>, <strong><code>_is_unique_id</code></strong>:<code>List</code>[<code>T</code>]=<em><code>None</code></em>, <strong><code>_is_mandatory</code></strong>:<code>List</code>[<code>T</code>]=<em><code>None</code></em>, <strong><code>_name_clean</code></strong>:<code>str</code>=<em><code>None</code></em>, <strong><code>_name_raw</code></strong>:<code>str</code>=<em><code>None</code></em>)</p>
+<h2 id="Meta" class="doc_header"><code>class</code> <code>Meta</code><a href="https://github.com/tkanngiesser/dproc/tree/master/dproc/core.py#L29" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Meta</code>(<strong><code>_datatypes</code></strong>:<code>DataFrame</code>=<em><code>None</code></em>, <strong><code>_definition</code></strong>:<code>DataFrame</code>=<em><code>None</code></em>, <strong><code>_description</code></strong>:<code>DataFrame</code>=<em><code>None</code></em>, <strong><code>_entity_definition</code></strong>:<code>DataFrame</code>=<em><code>None</code></em>, <strong><code>_entity</code></strong>:<code>str</code>=<em><code>None</code></em>, <strong><code>_is_unique_id</code></strong>:<code>List</code>[<code>T</code>]=<em><code>None</code></em>, <strong><code>_is_mandatory</code></strong>:<code>List</code>[<code>T</code>]=<em><code>None</code></em>, <strong><code>_name_clean</code></strong>:<code>List</code>[<code>T</code>]=<em><code>None</code></em>, <strong><code>_name_raw</code></strong>:<code>List</code>[<code>T</code>]=<em><code>None</code></em>, <strong><code>_name_dashboard</code></strong>:<code>List</code>[<code>T</code>]=<em><code>None</code></em>, <strong><code>_profile_report</code></strong>:<code>ProfileReport</code>=<em><code>None</code></em>)</p>
 </blockquote>
-<p>Meta(_datatypes: pandas.core.frame.DataFrame = None, _definition: pandas.core.frame.DataFrame = None, _description: pandas.core.frame.DataFrame = None, _entity_definition: pandas.core.frame.DataFrame = None, _entity: str = None, _is_unique_id: List = None, _is_mandatory: List = None, _name_clean: str = None, _name_raw: str = None)</p>
+<p>Meta(_datatypes: pandas.core.frame.DataFrame = None, _definition: pandas.core.frame.DataFrame = None, _description: pandas.core.frame.DataFrame = None, _entity_definition: pandas.core.frame.DataFrame = None, _entity: str = None, _is_unique_id: List = None, _is_mandatory: List = None, _name_clean: List = None, _name_raw: List = None, _name_dashboard: List = None, _profile_report: pandas_profiling.<strong>init</strong>.ProfileReport = None)</p>
 
 </div>
 
@@ -54,7 +54,15 @@ summary: "API details."
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="Example:-make_definition">Example: make_definition<a class="anchor-link" href="#Example:-make_definition">&#182;</a></h4>
+<p><strong>Example: make_definition</strong></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>As a starting point name the entity.</p>
+
 </div>
 </div>
 </div>
@@ -63,9 +71,46 @@ summary: "API details."
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">makeMixedDataFrame</span><span class="p">()</span>
-<span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;UNIQUE ID&#39;</span><span class="p">,</span> <span class="s1">&#39;Basic value&#39;</span><span class="p">,</span> <span class="s1">&#39;textual DEscription&#39;</span><span class="p">,</span> <span class="s1">&#39;DATE-OF-OCCURENCE&#39;</span><span class="p">]</span>
-<span class="n">df</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">meta</span><span class="o">.</span><span class="n">entity</span> <span class="o">=</span> <span class="s1">&#39;meteor-landing&#39;</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">meteor_landing</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;examples/meteorite-landings.csv&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">meta</span><span class="o">.</span><span class="n">make_definition</span><span class="p">(</span><span class="n">meteor_landing</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">meta</span><span class="o">.</span><span class="n">definition</span>
 </pre></div>
 
     </div>
@@ -97,47 +142,126 @@ summary: "API details."
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>UNIQUE ID</th>
-      <th>Basic value</th>
-      <th>textual DEscription</th>
-      <th>DATE-OF-OCCURENCE</th>
+      <th>entity</th>
+      <th>name_raw</th>
+      <th>name_clean</th>
+      <th>name_dashboard</th>
+      <th>is_unique_id</th>
+      <th>is_mandatory</th>
+      <th>datatype</th>
+      <th>description</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>0</th>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>foo1</td>
-      <td>2009-01-01</td>
+      <td>meteor-landing</td>
+      <td>Name</td>
+      <td>name</td>
+      <td>Name</td>
+      <td>False</td>
+      <td>True</td>
+      <td>object</td>
+      <td>None</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>1.0</td>
-      <td>1.0</td>
-      <td>foo2</td>
-      <td>2009-01-02</td>
+      <td>meteor-landing</td>
+      <td>ID</td>
+      <td>id</td>
+      <td>Id</td>
+      <td>False</td>
+      <td>True</td>
+      <td>int64</td>
+      <td>None</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>2.0</td>
-      <td>0.0</td>
-      <td>foo3</td>
-      <td>2009-01-05</td>
+      <td>meteor-landing</td>
+      <td>Name Type</td>
+      <td>name_type</td>
+      <td>NameType</td>
+      <td>False</td>
+      <td>True</td>
+      <td>object</td>
+      <td>None</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>3.0</td>
-      <td>1.0</td>
-      <td>foo4</td>
-      <td>2009-01-06</td>
+      <td>meteor-landing</td>
+      <td>Rec-class</td>
+      <td>rec_class</td>
+      <td>RecClass</td>
+      <td>False</td>
+      <td>True</td>
+      <td>object</td>
+      <td>None</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>4.0</td>
-      <td>0.0</td>
-      <td>foo5</td>
-      <td>2009-01-07</td>
+      <td>meteor-landing</td>
+      <td>MASs</td>
+      <td>mass</td>
+      <td>Mass</td>
+      <td>False</td>
+      <td>True</td>
+      <td>float64</td>
+      <td>None</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>meteor-landing</td>
+      <td>Fall</td>
+      <td>fall</td>
+      <td>Fall</td>
+      <td>False</td>
+      <td>True</td>
+      <td>object</td>
+      <td>None</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>meteor-landing</td>
+      <td>YEAR</td>
+      <td>year</td>
+      <td>Year</td>
+      <td>False</td>
+      <td>True</td>
+      <td>float64</td>
+      <td>None</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>meteor-landing</td>
+      <td>Rec_lat</td>
+      <td>rec_lat</td>
+      <td>RecLat</td>
+      <td>False</td>
+      <td>True</td>
+      <td>float64</td>
+      <td>None</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>meteor-landing</td>
+      <td>Rec_long</td>
+      <td>rec_long</td>
+      <td>RecLong</td>
+      <td>False</td>
+      <td>True</td>
+      <td>float64</td>
+      <td>None</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>meteor-landing</td>
+      <td>Geo Location</td>
+      <td>geo_location</td>
+      <td>GeoLocation</td>
+      <td>False</td>
+      <td>True</td>
+      <td>object</td>
+      <td>None</td>
     </tr>
   </tbody>
 </table>
@@ -150,13 +274,174 @@ summary: "API details."
 </div>
 
 </div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The result is a definition which can be used as a start providing reasonable defaults.
+You can now save this file and edit in an external program or further tweak.</p>
+
+</div>
+</div>
+</div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">dd</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">make_definition</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
-<span class="n">dd</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">meta</span><span class="o">.</span><span class="n">description</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>{&#39;name&#39;: None,
+ &#39;id&#39;: None,
+ &#39;name_type&#39;: None,
+ &#39;rec_class&#39;: None,
+ &#39;mass&#39;: None,
+ &#39;fall&#39;: None,
+ &#39;year&#39;: None,
+ &#39;rec_lat&#39;: None,
+ &#39;rec_long&#39;: None,
+ &#39;geo_location&#39;: None}</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">meta</span><span class="o">.</span><span class="n">name_dashboard</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>{&#39;name&#39;: &#39;Name&#39;,
+ &#39;id&#39;: &#39;Id&#39;,
+ &#39;name_type&#39;: &#39;NameType&#39;,
+ &#39;rec_class&#39;: &#39;RecClass&#39;,
+ &#39;mass&#39;: &#39;Mass&#39;,
+ &#39;fall&#39;: &#39;Fall&#39;,
+ &#39;year&#39;: &#39;Year&#39;,
+ &#39;rec_lat&#39;: &#39;RecLat&#39;,
+ &#39;rec_long&#39;: &#39;RecLong&#39;,
+ &#39;geo_location&#39;: &#39;GeoLocation&#39;}</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">meta</span><span class="o">.</span><span class="n">is_mandatory</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>{&#39;name&#39;: True,
+ &#39;id&#39;: True,
+ &#39;name_type&#39;: True,
+ &#39;rec_class&#39;: True,
+ &#39;mass&#39;: True,
+ &#39;fall&#39;: True,
+ &#39;year&#39;: True,
+ &#39;rec_lat&#39;: True,
+ &#39;rec_long&#39;: True,
+ &#39;geo_location&#39;: True}</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Setting the unique id:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">meta</span><span class="o">.</span><span class="n">is_unique_id</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Adding a description for the attribute <strong>name</strong>:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">meta</span><span class="o">.</span><span class="n">description</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;the name of the meteorite (typically a location, often modified with a number, year, composition, etc)&#39;</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">meta</span><span class="o">.</span><span class="n">definition</span>
 </pre></div>
 
     </div>
@@ -188,50 +473,126 @@ summary: "API details."
   <thead>
     <tr style="text-align: right;">
       <th></th>
+      <th>entity</th>
       <th>name_raw</th>
       <th>name_clean</th>
       <th>name_dashboard</th>
       <th>is_unique_id</th>
       <th>is_mandatory</th>
       <th>datatype</th>
+      <th>description</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>0</th>
-      <td>UNIQUE ID</td>
-      <td>unique_id</td>
-      <td>UniqueId</td>
-      <td>None</td>
+      <td>meteor-landing</td>
+      <td>Name</td>
+      <td>name</td>
+      <td>Name</td>
+      <td>False</td>
       <td>True</td>
-      <td>float64</td>
+      <td>object</td>
+      <td>the name of the meteorite (typically a locatio...</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>Basic value</td>
-      <td>basic_value</td>
-      <td>BasicValue</td>
-      <td>None</td>
+      <td>meteor-landing</td>
+      <td>ID</td>
+      <td>id</td>
+      <td>Id</td>
       <td>True</td>
-      <td>float64</td>
+      <td>True</td>
+      <td>int64</td>
+      <td>None</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>textual DEscription</td>
-      <td>textual_description</td>
-      <td>TextualDescription</td>
-      <td>None</td>
+      <td>meteor-landing</td>
+      <td>Name Type</td>
+      <td>name_type</td>
+      <td>NameType</td>
+      <td>False</td>
       <td>True</td>
       <td>object</td>
+      <td>None</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>DATE-OF-OCCURENCE</td>
-      <td>date_of_occurence</td>
-      <td>DateOfOccurence</td>
-      <td>None</td>
+      <td>meteor-landing</td>
+      <td>Rec-class</td>
+      <td>rec_class</td>
+      <td>RecClass</td>
+      <td>False</td>
       <td>True</td>
-      <td>datetime64[ns]</td>
+      <td>object</td>
+      <td>None</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>meteor-landing</td>
+      <td>MASs</td>
+      <td>mass</td>
+      <td>Mass</td>
+      <td>False</td>
+      <td>True</td>
+      <td>float64</td>
+      <td>None</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>meteor-landing</td>
+      <td>Fall</td>
+      <td>fall</td>
+      <td>Fall</td>
+      <td>False</td>
+      <td>True</td>
+      <td>object</td>
+      <td>None</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>meteor-landing</td>
+      <td>YEAR</td>
+      <td>year</td>
+      <td>Year</td>
+      <td>False</td>
+      <td>True</td>
+      <td>float64</td>
+      <td>None</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>meteor-landing</td>
+      <td>Rec_lat</td>
+      <td>rec_lat</td>
+      <td>RecLat</td>
+      <td>False</td>
+      <td>True</td>
+      <td>float64</td>
+      <td>None</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>meteor-landing</td>
+      <td>Rec_long</td>
+      <td>rec_long</td>
+      <td>RecLong</td>
+      <td>False</td>
+      <td>True</td>
+      <td>float64</td>
+      <td>None</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>meteor-landing</td>
+      <td>Geo Location</td>
+      <td>geo_location</td>
+      <td>GeoLocation</td>
+      <td>False</td>
+      <td>True</td>
+      <td>object</td>
+      <td>None</td>
     </tr>
   </tbody>
 </table>
@@ -256,7 +617,7 @@ summary: "API details."
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="step_rename_cols" class="doc_header"><code>step_rename_cols</code><a href="https://github.com/tkanngiesser/dproc/tree/master/dproc/core.py#L165" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>step_rename_cols</code>(<strong><code>df</code></strong>, <strong><code>mapping</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="step_rename_cols" class="doc_header"><code>step_rename_cols</code><a href="https://github.com/tkanngiesser/dproc/tree/master/dproc/core.py#L250" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>step_rename_cols</code>(<strong><code>df</code></strong>, <strong><code>mapping</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Rename columns (raw column names -&gt; clean column names)</p>
 
@@ -268,6 +629,26 @@ summary: "API details."
 </div>
 
 </div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Example: step_rename_cols</strong></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#### Examp</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
 <div class="cell border-box-sizing code_cell rendered">
 
 </div>
@@ -280,7 +661,7 @@ summary: "API details."
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="step_replace_missing_with_nan" class="doc_header"><code>step_replace_missing_with_nan</code><a href="https://github.com/tkanngiesser/dproc/tree/master/dproc/core.py#L179" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>step_replace_missing_with_nan</code>(<strong><code>df</code></strong>, <strong><code>missing_values</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="step_replace_missing_with_nan" class="doc_header"><code>step_replace_missing_with_nan</code><a href="https://github.com/tkanngiesser/dproc/tree/master/dproc/core.py#L264" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>step_replace_missing_with_nan</code>(<strong><code>df</code></strong>, <strong><code>missing_values</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Replace all missing values with nan</p>
 
@@ -304,7 +685,7 @@ summary: "API details."
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="step_remove_not_needed_cols" class="doc_header"><code>step_remove_not_needed_cols</code><a href="https://github.com/tkanngiesser/dproc/tree/master/dproc/core.py#L189" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>step_remove_not_needed_cols</code>(<strong><code>df</code></strong>, <strong><code>cols</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="step_remove_not_needed_cols" class="doc_header"><code>step_remove_not_needed_cols</code><a href="https://github.com/tkanngiesser/dproc/tree/master/dproc/core.py#L274" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>step_remove_not_needed_cols</code>(<strong><code>df</code></strong>, <strong><code>cols</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Remove not needed columns</p>
 
@@ -328,7 +709,7 @@ summary: "API details."
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="step_remove_rows_with_missing_ids" class="doc_header"><code>step_remove_rows_with_missing_ids</code><a href="https://github.com/tkanngiesser/dproc/tree/master/dproc/core.py#L198" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>step_remove_rows_with_missing_ids</code>(<strong><code>df</code></strong>, <strong><code>id_cols</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="step_remove_rows_with_missing_ids" class="doc_header"><code>step_remove_rows_with_missing_ids</code><a href="https://github.com/tkanngiesser/dproc/tree/master/dproc/core.py#L283" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>step_remove_rows_with_missing_ids</code>(<strong><code>df</code></strong>, <strong><code>id_cols</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Remove rows with invalid ids</p>
 
@@ -352,7 +733,7 @@ summary: "API details."
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="step_remove_duplicate_rows" class="doc_header"><code>step_remove_duplicate_rows</code><a href="https://github.com/tkanngiesser/dproc/tree/master/dproc/core.py#L207" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>step_remove_duplicate_rows</code>(<strong><code>df</code></strong>, <strong><code>id_cols</code></strong>=<em><code>None</code></em>, <strong><code>keep</code></strong>=<em><code>'last'</code></em>)</p>
+<h4 id="step_remove_duplicate_rows" class="doc_header"><code>step_remove_duplicate_rows</code><a href="https://github.com/tkanngiesser/dproc/tree/master/dproc/core.py#L292" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>step_remove_duplicate_rows</code>(<strong><code>df</code></strong>, <strong><code>id_cols</code></strong>=<em><code>None</code></em>, <strong><code>keep</code></strong>=<em><code>'last'</code></em>)</p>
 </blockquote>
 <p>Remove duplicate rows</p>
 
@@ -376,7 +757,7 @@ summary: "API details."
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="step_format_dates" class="doc_header"><code>step_format_dates</code><a href="https://github.com/tkanngiesser/dproc/tree/master/dproc/core.py#L216" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>step_format_dates</code>(<strong><code>df</code></strong>, <strong><code>cols</code></strong>=<em><code>None</code></em>, <strong><code>date_format</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="step_format_dates" class="doc_header"><code>step_format_dates</code><a href="https://github.com/tkanngiesser/dproc/tree/master/dproc/core.py#L301" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>step_format_dates</code>(<strong><code>df</code></strong>, <strong><code>cols</code></strong>=<em><code>None</code></em>, <strong><code>date_format</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Format date columns</p>
 
@@ -403,7 +784,7 @@ summary: "API details."
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="step_format_round_numeric_cols" class="doc_header"><code>step_format_round_numeric_cols</code><a href="https://github.com/tkanngiesser/dproc/tree/master/dproc/core.py#L239" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>step_format_round_numeric_cols</code>(<strong><code>df</code></strong>, <strong><code>cols</code></strong>=<em><code>None</code></em>, <strong><code>decimal_places</code></strong>=<em><code>2</code></em>)</p>
+<h4 id="step_format_round_numeric_cols" class="doc_header"><code>step_format_round_numeric_cols</code><a href="https://github.com/tkanngiesser/dproc/tree/master/dproc/core.py#L324" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>step_format_round_numeric_cols</code>(<strong><code>df</code></strong>, <strong><code>cols</code></strong>=<em><code>None</code></em>, <strong><code>decimal_places</code></strong>=<em><code>2</code></em>)</p>
 </blockquote>
 <p>Round columns to defined number of decimal places</p>
 
@@ -427,7 +808,7 @@ summary: "API details."
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="step_change_dtypes" class="doc_header"><code>step_change_dtypes</code><a href="https://github.com/tkanngiesser/dproc/tree/master/dproc/core.py#L249" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>step_change_dtypes</code>(<strong><code>df</code></strong>, <strong><code>date_format</code></strong>=<em><code>'%Y-%m-%d %H:%M:%S'</code></em>)</p>
+<h4 id="step_change_dtypes" class="doc_header"><code>step_change_dtypes</code><a href="https://github.com/tkanngiesser/dproc/tree/master/dproc/core.py#L334" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>step_change_dtypes</code>(<strong><code>df</code></strong>, <strong><code>date_format</code></strong>=<em><code>'%Y-%m-%d %H:%M:%S'</code></em>)</p>
 </blockquote>
 <p>Change datatypes</p>
 
@@ -435,6 +816,25 @@ summary: "API details."
 
 </div>
 
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nd">@pf</span><span class="o">.</span><span class="n">register_dataframe_method</span>
+<span class="k">def</span> <span class="nf">make_profile</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">file_path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Make profile report&quot;&quot;&quot;</span>
+    <span class="n">meta</span><span class="o">.</span><span class="n">profile</span> <span class="o">=</span> <span class="n">ProfileReport</span><span class="p">(</span><span class="n">df</span><span class="p">,</span>
+                        <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>
+                        <span class="n">html</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;style&#39;</span><span class="p">:{</span><span class="s1">&#39;full_width&#39;</span><span class="p">:</span><span class="kc">True</span><span class="p">}})</span>
+    <span class="k">return</span> <span class="n">df</span>
+</pre></div>
+
+    </div>
 </div>
 </div>
 
